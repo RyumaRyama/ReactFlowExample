@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import ReactFlow, {
   Node,
   addEdge,
@@ -39,6 +39,18 @@ const nodeTypes = {
   custom: CustomNode
 };
 
+const AddNode = (nodes: Node[], count: number, setCount: any) => {
+  nodes.push(
+    {
+      id: count.toString(),
+      type: "custom",
+      data: { label: "Node " + count },
+      position: { x: 400, y: 200 }
+    }
+  )
+  setCount((prevCount: number) => { return prevCount + 1 })
+};
+
 const BasicFlow = () => {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -47,17 +59,26 @@ const BasicFlow = () => {
     [setEdges]
   );
 
+  const [count, setCount] = useState(5);
+
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-    >
-      <Background />
-    </ReactFlow>
+    <>
+      <input
+        type="button"
+        value="にゃーん"
+        onClick={() => {AddNode(nodes, count, setCount)}}
+      />
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+      >
+        <Background />
+      </ReactFlow>
+    </>
   );
 };
 
